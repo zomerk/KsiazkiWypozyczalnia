@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Book Library</title>
+</head>
+<body>
+<h1>Book Library</h1>
+
+<h2>All Books</h2>
+<ul>
+  <li th:each="book : ${books}">
+    <span th:text="${book.title}"></span> by <span th:text="${book.author}"></span>
+  </li>
+</ul>
+
+<h2>Books by Author</h2>
+<form action="/books/author" method="get">
+  <input type="text" name="author" placeholder="Enter author's name">
+  <button type="submit">Search</button>
+</form>
+</body>
+</html>
