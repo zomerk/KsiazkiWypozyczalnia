@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity(name = "User Table")
 @Getter
@@ -29,12 +30,14 @@ public class User {
     @JsonIgnore
     String role;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @ManyToMany
+    @OneToMany
     List<Library> borrowedBooks = new ArrayList<>();
+    @OneToMany
+    List<Articles> borrowedArticles = new ArrayList<>();
 
-    public User(String username, String encode, String role) {
-        this.username = username;
-        this.password = encode;
-        this.role = role;
-    }
+    @OneToMany
+    List<Books> booksList =  new ArrayList<>();;
+    @OneToMany
+    List<Articles> articlesList = new ArrayList<>();;
+
 }

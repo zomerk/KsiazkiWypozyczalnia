@@ -12,7 +12,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Articles {
+public class Articles{
     @Id
     int id;
+
 }

@@ -23,19 +23,12 @@ public class Library {
     @JsonIgnore
     @GeneratedValue(strategy = GenerationType.AUTO)
     long id;
-    @NotNull
-    String title;
-    @NotNull
-    String author;
-    @Min(value = 0)
-    @Max(value = 2024)
-    int year;
-    @Min(value = 0)
-    int count;
-    @Min(value = 0)
-    int pages;
-    @NotNull
-    String type;
+    @OneToMany
+    List<Books> booksList;
+
+    @OneToMany
+    List<Articles> articlesList;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToMany
     List<User> user;
