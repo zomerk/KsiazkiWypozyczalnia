@@ -2,6 +2,7 @@ package com.example.ksiazkiwypozyczalnia.Rest;
 
 import com.example.ksiazkiwypozyczalnia.Service.LibraryService;
 import com.example.ksiazkiwypozyczalnia.Service.UserService;
+import com.example.ksiazkiwypozyczalnia.repo.Articles;
 import com.example.ksiazkiwypozyczalnia.repo.Books;
 import com.example.ksiazkiwypozyczalnia.repo.User;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ import java.util.List;
 public class API {
     private final LibraryService libraryService;
 
-    public API(UserService userService, LibraryService libraryService) {
+    public API(LibraryService libraryService) {
         this.libraryService = libraryService;
     }
     @PostMapping("/user")
@@ -29,16 +30,40 @@ public class API {
         return libraryService.GetUsersList();
     }
     @PostMapping("/rentbook")
-    public void RentBookByUser(@RequestParam String name, @RequestParam long bookId){
-        libraryService.RentBookByUser(name,bookId);
+    public void RentBookByUser(@RequestParam long bookId){
+        org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        libraryService.RentBookByUser(authentication.getName(),bookId);
+    }
+    @PostMapping("/rentarticle")
+    public void RentArticleByUser(@RequestParam long ArticleId){
+        org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        libraryService.RentArticleByUser(authentication.getName(),ArticleId);
     }
     @PostMapping("/book")
     public void createBook(@RequestBody Books book){
         libraryService.CreateBook(book);
     }
     @GetMapping("/book")
-    public List<Books> GetListOfBooks(@RequestParam String name){
-        return libraryService.GetListOfBooks(name);
+    public List<Books> GetListOfBooks(){
+        org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return libraryService.GetListOfBooks(authentication.getName());
+    }
+    @GetMapping("/books")
+    public List<Books> GetAllBooks(){
+        return libraryService.GetAllBooks();
+    }
+    @GetMapping("/articles")
+    public List<Articles> GetAllArticles(){
+        return libraryService.GetAllArticles();
+    }
+    @PostMapping("/article")
+    public void createArticle(@RequestBody Articles articles){
+        libraryService.CreateArticle(articles);
+    }
+    @GetMapping("/article")
+    public List<Articles> GetListOfArticles(){
+        org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return libraryService.GetListOfArticles(authentication.getName());
     }
 
 }

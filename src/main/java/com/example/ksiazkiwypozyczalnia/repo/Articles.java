@@ -1,8 +1,7 @@
 package com.example.ksiazkiwypozyczalnia.repo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,14 +16,17 @@ import java.util.Date;
 @AllArgsConstructor
 public class Articles{
     @Id
-    int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Long id;
     String title;
     String author;
     String journal;
     int journalNumber;
     String language;
     String type;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinColumn(name = "user_id")
     User user;
 
 

@@ -1,22 +1,26 @@
 package com.example.ksiazkiwypozyczalnia.Service;
 
+import com.example.ksiazkiwypozyczalnia.CrudRepo.CrudArticles;
 import com.example.ksiazkiwypozyczalnia.CrudRepo.CrudBooks;
+import com.example.ksiazkiwypozyczalnia.repo.Articles;
 import com.example.ksiazkiwypozyczalnia.repo.Books;
 import com.example.ksiazkiwypozyczalnia.repo.User;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class LibraryService {
     private final UserService userService;
     private final CrudBooks crudBooks;
+    private final CrudArticles crudArticles;
 
 
-    public LibraryService(UserService userService, CrudBooks crudBooks) {
+    public LibraryService(UserService userService, CrudBooks crudBooks, CrudArticles crudArticles) {
         this.userService = userService;
         this.crudBooks = crudBooks;
+        this.crudArticles = crudArticles;
     }
 
     public List<User>  GetUsersList(){
@@ -33,10 +37,6 @@ public class LibraryService {
     public void RentBookByUser(String name, long bookId){
         var user = userService.FindByUserName(name);
         var book = crudBooks.findById(bookId);
-        var list = user.getBorrowedBooks();
-        list.add(book);
-        user.setBorrowedBooks(list);
-        //userService.Update(user);
         book.setUser(user);
         crudBooks.save(book);
     }
@@ -45,5 +45,30 @@ public class LibraryService {
         return use.getBorrowedBooks();
     }
 
+    public List<Books> GetAllBooks() {
+        List<Books> allBooks = new ArrayList<>();
+        crudBooks.findAll().forEach(allBooks::add);
+        return allBooks;
+    }
+    public List<Articles> GetAllArticles() {
+        List<Articles> allArticles = new ArrayList<>();
+        crudArticles.findAll().forEach(allArticles::add);
+        return allArticles;
+    }
+
+    public void CreateArticle(Articles articles) {
+        crudArticles.save(articles);
+    }
+    public void RentArticleByUser(String name, long articleId){
+        var user = userService.FindByUserName(name);
+        var articles = crudArticles.findById(articleId).get();
+        articles.setUser(user);
+        crudArticles.save(articles);
+    }
+
+    public List<Articles> GetListOfArticles(String name) {
+        var use =userService.FindByUserName(name);
+        return use.getBorrowedArticles();
+    }
 }
 

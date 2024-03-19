@@ -27,20 +27,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                //.httpBasic(Customizer.withDefaults())
-                //.exceptionHandling(handing -> handing
-                //        .authenticationEntryPoint(restAuthenticationEntryPoint) // Handles auth error
-                //)
-                // Default Basic auth config
+                .httpBasic(Customizer.withDefaults())
+                .exceptionHandling(handing -> handing
+                        .authenticationEntryPoint(restAuthenticationEntryPoint) // Handles auth error
+                )
+                 //Default Basic auth config
                 .csrf(configurer -> configurer.disable())
                 // for POST requests via Postman
                 .authorizeHttpRequests(auth -> auth
-                        //.requestMatchers(HttpMethod.POST, "/api/register").permitAll()
-//                        .requestMatchers(HttpMethod.POST, "/books/add").hasRole("ADMIN")
-//                        .requestMatchers(HttpMethod.POST,"/books/add_List").hasRole("ADMIN")
-//                        .requestMatchers(HttpMethod.POST,"books/borrow").hasRole("USER")
-//                        .requestMatchers(HttpMethod.GET,"/books/user").hasRole("ADMIN")
-                        .anyRequest().permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/user").permitAll() //hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/user").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/book").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/book").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/article").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/books").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/articles").permitAll()
+                        .anyRequest().hasAnyRole("ADMIN","USER")
                 )
                 .formLogin(Customizer.withDefaults())
         ;

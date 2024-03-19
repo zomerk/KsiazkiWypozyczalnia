@@ -35,11 +35,11 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.AUTO)
     @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY,mappedBy = "user")
     List<Books> borrowedBooks = new ArrayList<>();
-//
-//    @JsonProperty(access = JsonProperty.Access.AUTO)
-//    @JoinColumn(name = "Library_id")
-//    @OneToMany()
-//    List<Articles> borrowedArticles = new ArrayList<>();
+
+
+    @JsonProperty(access = JsonProperty.Access.AUTO)
+    @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY,mappedBy = "user")
+    List<Articles> borrowedArticles = new ArrayList<>();
 
 //    @OneToMany
 //    List<Books> booksWantedList =  new ArrayList<>();
