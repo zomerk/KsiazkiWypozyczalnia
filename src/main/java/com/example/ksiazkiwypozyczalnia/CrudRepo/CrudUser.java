@@ -1,6 +1,5 @@
 package com.example.ksiazkiwypozyczalnia.CrudRepo;
 
-import com.example.ksiazkiwypozyczalnia.repo.Library;
 import com.example.ksiazkiwypozyczalnia.repo.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

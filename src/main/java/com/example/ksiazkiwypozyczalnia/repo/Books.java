@@ -1,7 +1,7 @@
 package com.example.ksiazkiwypozyczalnia.repo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -17,7 +17,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Books{
     @Id
-    int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Long id;
     String title;
     @NotNull
     String author;
@@ -28,5 +29,10 @@ public class Books{
     int pages;
     @NotNull
     String type;
+    String language;
+    @ManyToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinColumn(name = "user_id")
+    User user;
 
 }

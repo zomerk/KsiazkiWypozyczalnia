@@ -1,43 +1,49 @@
 package com.example.ksiazkiwypozyczalnia.Service;
 
-import com.example.ksiazkiwypozyczalnia.CrudRepo.CrudLibrary;
-import com.example.ksiazkiwypozyczalnia.repo.Library;
-import org.apache.catalina.util.LifecycleBase;
-import org.springframework.http.ResponseEntity;
+import com.example.ksiazkiwypozyczalnia.CrudRepo.CrudBooks;
+import com.example.ksiazkiwypozyczalnia.repo.Books;
+import com.example.ksiazkiwypozyczalnia.repo.User;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 @Service
 public class LibraryService {
-    private final CrudLibrary library;
+    private final UserService userService;
+    private final CrudBooks crudBooks;
 
-    public LibraryService(CrudLibrary library) {
-        this.library = library;
-    }
 
-    public ResponseEntity<?> CreateQuiz(Library libraryforsave){
-        library.save(libraryforsave);
-        return ResponseEntity.ok().build();
-    }
-    public List<Library> GetAllQuizes(){
-        return library.findAll();
-    }
-    public List<Library> BooksRentedByUser(String user){return  library.findAllByUserUsername(user);}
-    public List<Library> BooksByAuthor(String name){return library.findAllByAuthor(name);}
-    public List<Library> BooksByType(String type){return library.findAllByType(type);}
-    public List<Library> BooksByPagesMore(int number){return  library.findAllByPagesGreaterThan(number);}
-    public List<Library> BooksByPagesLess(int number){return  library.findAllByPagesLessThan(number);}
-    public Library FindByID(long id) {
-        if (library.findById(id).isPresent()) {
-            return library.findById(id).get();
-        } else {
-            return null;
-        }
+    public LibraryService(UserService userService, CrudBooks crudBooks) {
+        this.userService = userService;
+        this.crudBooks = crudBooks;
     }
 
-    public void Update(Library collection) {
-        library.save(collection);
+    public List<User>  GetUsersList(){
+        return userService.getAllUsers();
+
     }
+    public void CreateUser(User user){
+        userService.CreateUser(user);
+
+    }
+    public void CreateBook(Books book){
+        crudBooks.save(book);
+    }
+    public void RentBookByUser(String name, long bookId){
+        var user = userService.FindByUserName(name);
+        var book = crudBooks.findById(bookId);
+        var list = user.getBorrowedBooks();
+        list.add(book);
+        user.setBorrowedBooks(list);
+        //userService.Update(user);
+        book.setUser(user);
+        crudBooks.save(book);
+    }
+    public List<Books> GetListOfBooks(String name){
+        var use =userService.FindByUserName(name);
+        return use.getBorrowedBooks();
+    }
+
 }
 

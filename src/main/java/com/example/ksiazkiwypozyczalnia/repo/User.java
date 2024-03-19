@@ -8,17 +8,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity(name = "User Table")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,15 +26,24 @@ public class User {
     String password;
     @JsonIgnore
     String role;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToMany
-    List<Library> borrowedBooks = new ArrayList<>();
-    @OneToMany
-    List<Articles> borrowedArticles = new ArrayList<>();
 
-    @OneToMany
-    List<Books> booksList =  new ArrayList<>();;
-    @OneToMany
-    List<Articles> articlesList = new ArrayList<>();;
+    public User(String username, String password, String role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+    @JsonProperty(access = JsonProperty.Access.AUTO)
+    @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY,mappedBy = "user")
+    List<Books> borrowedBooks = new ArrayList<>();
+//
+//    @JsonProperty(access = JsonProperty.Access.AUTO)
+//    @JoinColumn(name = "Library_id")
+//    @OneToMany()
+//    List<Articles> borrowedArticles = new ArrayList<>();
+
+//    @OneToMany
+//    List<Books> booksWantedList =  new ArrayList<>();
+//    @OneToMany
+//    List<Articles> articlesWantedList = new ArrayList<>();
 
 }

@@ -32,14 +32,14 @@ public class SecurityConfig {
                 //        .authenticationEntryPoint(restAuthenticationEntryPoint) // Handles auth error
                 //)
                 // Default Basic auth config
-                //.csrf(configurer -> configurer.disable())
+                .csrf(configurer -> configurer.disable())
                 // for POST requests via Postman
                 .authorizeHttpRequests(auth -> auth
                         //.requestMatchers(HttpMethod.POST, "/api/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/books/add").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/books/add_List").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST,"books/borrow").hasRole("USER")
-                        .requestMatchers(HttpMethod.GET,"/books/user").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.POST, "/books/add").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.POST,"/books/add_List").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.POST,"books/borrow").hasRole("USER")
+//                        .requestMatchers(HttpMethod.GET,"/books/user").hasRole("ADMIN")
                         .anyRequest().permitAll()
                 )
                 .formLogin(Customizer.withDefaults())

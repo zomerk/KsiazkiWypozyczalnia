@@ -1,7 +1,6 @@
 package com.example.ksiazkiwypozyczalnia.Service;
 
 import com.example.ksiazkiwypozyczalnia.CrudRepo.CrudUser;
-import com.example.ksiazkiwypozyczalnia.repo.Library;
 import com.example.ksiazkiwypozyczalnia.repo.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,7 +44,9 @@ public class UserService implements UserDetailsService {
             return false;
         }
     }
-
+    public List<User> getAllUsers(){
+        return crudUser.findAll();
+    }
     public User FindByUserName(String username){
         return crudUser.findByUsername(username);
     }
