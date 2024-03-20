@@ -4,6 +4,7 @@ import com.example.ksiazkiwypozyczalnia.CrudRepo.CrudUser;
 import com.example.ksiazkiwypozyczalnia.repo.User;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -44,8 +45,8 @@ public class UserService implements UserDetailsService {
             return false;
         }
     }
-    public List<User> getAllUsers(){
-        return crudUser.findAll();
+    public ResponseEntity<List<User>> getAllUsers(){
+        return ResponseEntity.ok().body(crudUser.findAll());
     }
     public User FindByUserName(String username){
         return crudUser.findByUsername(username);

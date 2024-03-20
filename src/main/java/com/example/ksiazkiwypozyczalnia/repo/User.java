@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,11 +33,12 @@ public class User {
         this.password = password;
         this.role = role;
     }
+    @Size(min = 0,max = 5)
     @JsonProperty(access = JsonProperty.Access.AUTO)
     @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY,mappedBy = "user")
     List<Books> borrowedBooks = new ArrayList<>();
 
-
+    @Size(min=0, max = 5)
     @JsonProperty(access = JsonProperty.Access.AUTO)
     @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY,mappedBy = "user")
     List<Articles> borrowedArticles = new ArrayList<>();
