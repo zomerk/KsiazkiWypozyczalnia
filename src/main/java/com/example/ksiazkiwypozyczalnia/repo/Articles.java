@@ -28,6 +28,7 @@ public class Articles{
     @JsonIgnore
     @JoinColumn(name = "user_id")
     User user;
+    boolean isTaken = false;
 
 
 

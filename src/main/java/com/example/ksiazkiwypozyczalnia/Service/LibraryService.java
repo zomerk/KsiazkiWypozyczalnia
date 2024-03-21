@@ -2,13 +2,16 @@ package com.example.ksiazkiwypozyczalnia.Service;
 
 import com.example.ksiazkiwypozyczalnia.CrudRepo.CrudArticles;
 import com.example.ksiazkiwypozyczalnia.CrudRepo.CrudBooks;
+import com.example.ksiazkiwypozyczalnia.CrudRepo.CrudReserveBooks;
 import com.example.ksiazkiwypozyczalnia.repo.Articles;
 import com.example.ksiazkiwypozyczalnia.repo.Books;
+import com.example.ksiazkiwypozyczalnia.repo.ReserveBooks;
 import com.example.ksiazkiwypozyczalnia.repo.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -16,12 +19,14 @@ public class LibraryService {
     private final UserService userService;
     private final CrudBooks crudBooks;
     private final CrudArticles crudArticles;
+    private final CrudReserveBooks crudReserveBooks;
 
 
-    public LibraryService(UserService userService, CrudBooks crudBooks, CrudArticles crudArticles) {
+    public LibraryService(UserService userService, CrudBooks crudBooks, CrudArticles crudArticles, CrudReserveBooks crudReserveBooks) {
         this.userService = userService;
         this.crudBooks = crudBooks;
         this.crudArticles = crudArticles;
+        this.crudReserveBooks = crudReserveBooks;
     }
 
     public ResponseEntity<List<User>>  GetUsersList(){
@@ -43,11 +48,13 @@ public class LibraryService {
     public boolean RentBookByUser(String name, long bookId){
         var user = userService.FindByUserName(name);
         var book = crudBooks.findById(bookId);
-        if(book.getUser() != null){
+        if(book.isTaken()){
             return false;
         }
-        book.setUser(user);
+        var reserve = new ReserveBooks<Collection<E>>(user.getUsername(),bookId,true);
+        book.setTaken(true);
         crudBooks.save(book);
+        crudReserveBooks.save(reserve);
         return true;
     }
     public List<Books> GetListOfBooks(String name){
@@ -72,12 +79,14 @@ public class LibraryService {
     public boolean RentArticleByUser(String name, long articleId){
         var user = userService.FindByUserName(name);
         var articles = crudArticles.findById(articleId).get();
-        if(articles.getUser() != null){
+        if(articles.isTaken()){
             return false;
         }
         else{
-            articles.setUser(user);
+            var reserve = new ReserveBooks<Collection<E>>(user.getUsername(),articleId,false);
+            articles.setTaken(true);
             crudArticles.save(articles);
+            crudReserveBooks.save(reserve);
             return true;
         }
     }
@@ -89,5 +98,18 @@ public class LibraryService {
     public User GetUser(String name){
         return userService.FindByUserName(name);
     }
+    public List<ReserveBooks> GetWantedBooks(String username){
+        return crudReserveBooks.findAllByUserName(username);
+    }
 }
 
+//    public boolean RentBookByUser(String name, long bookId){
+//        var user = userService.FindByUserName(name);
+//        var book = crudBooks.findById(bookId);
+//        if(book.getUser() != null){
+//            return false;
+//        }
+//        book.setUser(user);
+//        crudBooks.save(book);
+//        return true;
+//    }

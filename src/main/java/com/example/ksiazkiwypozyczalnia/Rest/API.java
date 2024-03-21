@@ -1,16 +1,15 @@
 package com.example.ksiazkiwypozyczalnia.Rest;
 
 import com.example.ksiazkiwypozyczalnia.Service.LibraryService;
-import com.example.ksiazkiwypozyczalnia.Service.UserService;
 import com.example.ksiazkiwypozyczalnia.repo.Articles;
 import com.example.ksiazkiwypozyczalnia.repo.Books;
+import com.example.ksiazkiwypozyczalnia.repo.ReserveBooks;
 import com.example.ksiazkiwypozyczalnia.repo.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -37,7 +36,7 @@ public class API {
             return ResponseEntity.status(403).body("Limit ksiązek wyczerpany");
         }
         if(libraryService.RentBookByUser(authentication.getName(),bookId)){
-            return ResponseEntity.ok().body("Ksiązka wypozyczna");
+            return ResponseEntity.ok().body("Chęć wypożycznie ksiązki wysłana do administratora");
         }
         else{
             return ResponseEntity.status(404).body("Książka juz jest wypozyczona");
@@ -52,7 +51,7 @@ public class API {
             return ResponseEntity.status(403).body("Limit artykułów wyczerpany");
         }
         if(libraryService.RentArticleByUser(authentication.getName(),ArticleId)){
-            return ResponseEntity.ok().body("Artykuł wypozyczony");
+            return ResponseEntity.ok().body("Chęć wypożycznie ksiązki wysłana do administratora");
         }
         else{
             return ResponseEntity.status(404).body("Artykuł juz jest wypozyczona");
@@ -85,6 +84,10 @@ public class API {
     public ResponseEntity<List<Articles>> GetListOfArticles(){
         org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return ResponseEntity.ok().body(libraryService.GetListOfArticles(authentication.getName()));
+    }
+    @GetMapping("/reserve")
+    public ResponseEntity<List<ReserveBooks>> GetWantedBooksByUser(@RequestParam String username){
+        return ResponseEntity.ok(libraryService.GetWantedBooks(username));
     }
 
 }
