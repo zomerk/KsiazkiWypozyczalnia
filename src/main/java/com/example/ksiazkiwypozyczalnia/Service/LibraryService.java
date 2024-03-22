@@ -51,7 +51,7 @@ public class LibraryService {
         if(book.isTaken()){
             return false;
         }
-        var reserve = new ReserveBooks<Collection<E>>(user.getUsername(),bookId,true);
+        var reserve = new ReserveBooks(user.getUsername(),bookId,true);
         book.setTaken(true);
         crudBooks.save(book);
         crudReserveBooks.save(reserve);
@@ -83,7 +83,7 @@ public class LibraryService {
             return false;
         }
         else{
-            var reserve = new ReserveBooks<Collection<E>>(user.getUsername(),articleId,false);
+            var reserve = new ReserveBooks(user.getUsername(),articleId,false);
             articles.setTaken(true);
             crudArticles.save(articles);
             crudReserveBooks.save(reserve);

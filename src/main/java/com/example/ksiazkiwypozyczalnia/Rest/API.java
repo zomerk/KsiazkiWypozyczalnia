@@ -44,14 +44,14 @@ public class API {
 
     }
     @PostMapping("/rentarticle")
-    public ResponseEntity<?> RentArticleByUser(@RequestParam long ArticleId){
+    public ResponseEntity<?> RentArticleByUser(@RequestParam long articleId){
         org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         var user = libraryService.GetUser(authentication.getName());
         if(user.getBorrowedArticles().size() >= 5){
             return ResponseEntity.status(403).body("Limit artykułów wyczerpany");
         }
-        if(libraryService.RentArticleByUser(authentication.getName(),ArticleId)){
-            return ResponseEntity.ok().body("Chęć wypożycznie ksiązki wysłana do administratora");
+        if(libraryService.RentArticleByUser(authentication.getName(),articleId)){
+            return ResponseEntity.ok().body("Chęć wypożycznie artykłu wysłana do administratora");
         }
         else{
             return ResponseEntity.status(404).body("Artykuł juz jest wypozyczona");

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Catalog</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .rentButton {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Books</h2>
+<table id="booksTable">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Type</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody id="booksBody">
+    <!-- Book data will be inserted here -->
+    </tbody>
+</table>
+
+<h2>Articles</h2>
+<table id="articlesTable">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Type</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody id="articlesBody">
+    <!-- Article data will be inserted here -->
+    </tbody>
+</table>
+
+<script>
+    // Function to handle renting book or article
+    function rentItem(type, id) {
+        fetch('/api/user')
+            .then(response => {
+                if (!response.ok) {
+                    // User is not logged in, redirect to login page
+                    window.location.href = '/login';
+                    return;
+                }
+                return response.json();
+            })
+            .then(user => {
+                if (!user) {
+                    // User is not logged in, redirect to login page
+                    window.location.href = '/login';
+                    return;
+                }
+
+                fetch(`/api/rent${type}?${type}Id=${id}`, { method: 'POST' })
+                    .then(response => response.text())
+                    .then(message => alert(message))
+                    .catch(error => console.error(`Error renting ${type}:`, error));
+            })
+            .catch(error => console.error('Error checking user authentication:', error));
+    }
+
+    // Fetch books data
+    fetch('/api/books')
+        .then(response => response.json())
+        .then(data => {
+            const booksBody = document.getElementById('booksBody');
+            data.forEach(book => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${book.title}</td>
+                    <td>${book.author}</td>
+                    <td>${book.type}</td>
+                    <td><button class="rentButton" onclick="rentItem('book', ${book.id})">Rent</button></td>
+                `;
+                booksBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching books:', error));
+
+    // Fetch articles data
+    fetch('/api/articles')
+        .then(response => response.json())
+        .then(data => {
+            const articlesBody = document.getElementById('articlesBody');
+            data.forEach(article => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${article.title}</td>
+                    <td>${article.author}</td>
+                    <td>${article.type}</td>
+                    <td><button class="rentButton" onclick="rentItem('article', ${article.id})">Rent</button></td>
+                `;
+                articlesBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching articles:', error));
+</script>
+
+</body>
+</html>
