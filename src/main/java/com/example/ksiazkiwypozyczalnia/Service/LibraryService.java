@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static org.hibernate.query.sqm.tree.SqmNode.log;
+
 @Service
 public class LibraryService {
     private final UserService userService;
@@ -100,6 +102,16 @@ public class LibraryService {
     }
     public List<ReserveBooks> GetWantedBooks(String username){
         return crudReserveBooks.findAllByUserName(username);
+    }
+
+    public List<Books> SearchByNameBooks(String term) {
+
+        return crudBooks.findBySearchBar( term);
+    }
+
+    public List<Articles> SearchByNameArticle(String term) {
+        System.out.println(term);
+        return crudArticles.findBySearchBar( term);
     }
 }
 

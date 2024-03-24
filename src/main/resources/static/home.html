@@ -34,6 +34,10 @@
 </head>
 <body>
 
+<h2>Search</h2>
+<input type="text" id="searchInput" placeholder="Enter search term...">
+<button onclick="search()">Search</button>
+
 <h2>Books</h2>
 <table id="booksTable">
     <thead>
@@ -65,67 +69,93 @@
 </table>
 
 <script>
-    // Function to handle renting book or article
-    function rentItem(type, id) {
-        fetch('/api/user')
-            .then(response => {
-                if (!response.ok) {
-                    // User is not logged in, redirect to login page
-                    window.location.href = '/login';
-                    return;
-                }
-                return response.json();
-            })
-            .then(user => {
-                if (!user) {
-                    // User is not logged in, redirect to login page
-                    window.location.href = '/login';
-                    return;
-                }
+    function search() {
+        const searchTerm = document.getElementById('searchInput').value.trim();
 
-                fetch(`/api/rent${type}?${type}Id=${id}`, { method: 'POST' })
-                    .then(response => response.text())
-                    .then(message => alert(message))
-                    .catch(error => console.error(`Error renting ${type}:`, error));
+        // Search for books
+        fetch(`/api/search/b?Term=${searchTerm}`)
+            .then(response => response.json())
+            .then(data => {
+                const booksBody = document.getElementById('booksBody');
+                booksBody.innerHTML = ''; // Clear previous search results
+                data.forEach(book => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${book.title}</td>
+                        <td>${book.author}</td>
+                        <td>${book.type}</td>
+                        <td><button class="rentButton" onclick="rentItem('book', ${book.id})">Rent</button></td>
+                    `;
+                    booksBody.appendChild(row);
+                });
             })
-            .catch(error => console.error('Error checking user authentication:', error));
+            .catch(error => console.error('Error searching books:', error));
+
+        // Search for articles
+        fetch(`/api/search/a?Term=${searchTerm}`)
+            .then(response => response.json())
+            .then(data => {
+                const articlesBody = document.getElementById('articlesBody');
+                articlesBody.innerHTML = ''; // Clear previous search results
+                data.forEach(article => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${article.title}</td>
+                        <td>${article.author}</td>
+                        <td>${article.type}</td>
+                        <td><button class="rentButton" onclick="rentItem('article', ${article.id})">Rent</button></td>
+                    `;
+                    articlesBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error searching articles:', error));
     }
 
-    // Fetch books data
-    fetch('/api/books')
-        .then(response => response.json())
-        .then(data => {
-            const booksBody = document.getElementById('booksBody');
-            data.forEach(book => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${book.title}</td>
-                    <td>${book.author}</td>
-                    <td>${book.type}</td>
-                    <td><button class="rentButton" onclick="rentItem('book', ${book.id})">Rent</button></td>
-                `;
-                booksBody.appendChild(row);
-            });
-        })
-        .catch(error => console.error('Error fetching books:', error));
+    function rentItem(type, id) {
+        fetch(`/api/rent${type}?${type}Id=${id}`, { method: 'POST' })
+            .then(response => response.text())
+            .then(message => alert(message))
+            .catch(error => console.error(`Error renting ${type}:`, error));
+    }
 
-    // Fetch articles data
-    fetch('/api/articles')
-        .then(response => response.json())
-        .then(data => {
-            const articlesBody = document.getElementById('articlesBody');
-            data.forEach(article => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${article.title}</td>
-                    <td>${article.author}</td>
-                    <td>${article.type}</td>
-                    <td><button class="rentButton" onclick="rentItem('article', ${article.id})">Rent</button></td>
-                `;
-                articlesBody.appendChild(row);
-            });
-        })
-        .catch(error => console.error('Error fetching articles:', error));
+    // Load books and articles when the page loads
+    window.onload = function() {
+        // Load books
+        fetch('/api/books')
+            .then(response => response.json())
+            .then(data => {
+                const booksBody = document.getElementById('booksBody');
+                data.forEach(book => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${book.title}</td>
+                        <td>${book.author}</td>
+                        <td>${book.type}</td>
+                        <td><button class="rentButton" onclick="rentItem('book', ${book.id})">Rent</button></td>
+                    `;
+                    booksBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching books:', error));
+
+        // Load articles
+        fetch('/api/articles')
+            .then(response => response.json())
+            .then(data => {
+                const articlesBody = document.getElementById('articlesBody');
+                data.forEach(article => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${article.title}</td>
+                        <td>${article.author}</td>
+                        <td>${article.type}</td>
+                        <td><button class="rentButton" onclick="rentItem('article', ${article.id})">Rent</button></td>
+                    `;
+                    articlesBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching articles:', error));
+    };
 </script>
 
 </body>

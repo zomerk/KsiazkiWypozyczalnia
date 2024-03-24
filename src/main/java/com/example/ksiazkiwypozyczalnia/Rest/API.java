@@ -89,5 +89,14 @@ public class API {
     public ResponseEntity<List<ReserveBooks>> GetWantedBooksByUser(@RequestParam String username){
         return ResponseEntity.ok(libraryService.GetWantedBooks(username));
     }
+    @GetMapping("/search/b")
+    public List<Books> SearchBooks(@RequestParam String Term){
+        return libraryService.SearchByNameBooks(Term);
+    }
+
+    @GetMapping("/search/a")
+    public List<Articles> SearchArticles(@RequestParam String Term){
+        return libraryService.SearchByNameArticle(Term);
+    }
 
 }
