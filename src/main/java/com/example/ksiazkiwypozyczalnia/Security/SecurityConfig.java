@@ -22,6 +22,20 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
     AuthenticationEntryPoint restAuthenticationEntryPoint;
 
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            "/v3/api-docs/**",
+            "/api/public/**",
+            "/api/public/authenticate",
+            "/actuator/*",
+            "/swagger-ui/**"
+    };
+
     public SecurityConfig(AuthenticationEntryPoint restAuthenticationEntryPoint) {
         this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
     }
@@ -30,27 +44,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .httpBasic(withDefaults())
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .permitAll()
-                )
-                .exceptionHandling(handing -> handing
-                        .authenticationEntryPoint(restAuthenticationEntryPoint) // Handles auth error
-                )
-                 //Default Basic auth config
+               .httpBasic(withDefaults())
+//                .formLogin(form -> form
+//                        .loginPage("/login")
+//                        .permitAll()
+//                )
+//                .exceptionHandling(handing -> handing
+//                        .authenticationEntryPoint(restAuthenticationEntryPoint) // Handles auth error
+//                )
+//                 //Default Basic auth config
                 .csrf(AbstractHttpConfigurer::disable)
 
                 // for POST requests via Postman
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/api/user").permitAll() //hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/user").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/book").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/book").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/article").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/books").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/articles").permitAll()
-                        //.requestMatchers("/api/..").hasAnyRole("ADMIN","USER")
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().permitAll()
 
 

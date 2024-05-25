@@ -2,8 +2,6 @@ package com.example.ksiazkiwypozyczalnia.Service;
 
 import com.example.ksiazkiwypozyczalnia.CrudRepo.CrudUser;
 import com.example.ksiazkiwypozyczalnia.repo.User;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,33 +23,24 @@ public class UserService implements UserDetailsService {
     }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User transaction = crudUser
-                .findByUsername(username);
-        if(transaction == null) {
+        if(crudUser.findByUsername(username).isEmpty()) {
             System.out.println("User name not found");
             return null;
         }
         else{
+            User transaction = crudUser
+                    .findByUsername(username).get();
             return new UserAdapter(transaction);
         }
     }
-    public Boolean CreateUser(User user1){
-        var user = loadUserByUsername(user1.getUsername());
-        if(user == null){
-            crudUser.save(new User(user1.getUsername(), passwordEncoder.encode(user1.getPassword()),"user"));
-            return true;
+    public ResponseEntity<?> CreateUser(String username, String password){
+        var user = crudUser.findByUsername(username);
+        if(user.isEmpty()){
+            crudUser.save(new User(username, passwordEncoder.encode(password),"user"));
+            return ResponseEntity.ok().build();
         }
         else{
-            return false;
+            return ResponseEntity.ok("User already exists");
         }
-    }
-    public ResponseEntity<List<User>> getAllUsers(){
-        return ResponseEntity.ok().body(crudUser.findAll());
-    }
-    public User FindByUserName(String username){
-        return crudUser.findByUsername(username);
-    }
-    public void Update(User user){
-        crudUser.save(user);
     }
 }

@@ -17,9 +17,11 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "employee_seq", allocationSize = 1)
     long id;
     @NotNull
     String username;
@@ -28,24 +30,10 @@ public class User {
     @JsonIgnore
     String role;
 
+
     public User(String username, String password, String role) {
         this.username = username;
         this.password = password;
         this.role = role;
     }
-    @Size(min = 0,max = 5)
-    @JsonProperty(access = JsonProperty.Access.AUTO)
-    @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY,mappedBy = "user")
-    List<Books> borrowedBooks = new ArrayList<>();
-
-    @Size(min=0, max = 5)
-    @JsonProperty(access = JsonProperty.Access.AUTO)
-    @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY,mappedBy = "user")
-    List<Articles> borrowedArticles = new ArrayList<>();
-
-//    @OneToMany
-//    List<Books> booksWantedList =  new ArrayList<>();
-//    @OneToMany
-//    List<Articles> articlesWantedList = new ArrayList<>();
-
 }
