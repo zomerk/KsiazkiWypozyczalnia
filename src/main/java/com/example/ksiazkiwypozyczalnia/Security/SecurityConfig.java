@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -58,10 +59,18 @@ public class SecurityConfig {
                 // for POST requests via Postman
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_WHITELIST).permitAll()
+                        .requestMatchers("/user/api/UserName").hasAnyRole("USER", "ADMIN")
                         .anyRequest().permitAll()
 
 
+
                 )
+                .logout((logout) -> logout.
+                        logoutUrl("/logout")
+                        .logoutSuccessUrl("/") // przekierowaniw po wylogowaniu
+                        //https://docs.spring.io/spring-security/reference/6.0/servlet/authentication/logout.html
+                )
+
         ;
 
         return http.build();
@@ -70,4 +79,9 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+    @Bean
+    public SecurityContextLogoutHandler securityContextLogoutHandler() {
+        return new SecurityContextLogoutHandler();
+    }
+
 }
