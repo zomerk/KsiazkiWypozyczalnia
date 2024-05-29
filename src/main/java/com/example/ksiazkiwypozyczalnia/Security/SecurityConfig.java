@@ -46,6 +46,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                .httpBasic(withDefaults())
+                //https://www.baeldung.com/spring-redirect-after-login
 //                .formLogin(form -> form
 //                        .loginPage("/login")
 //                        .permitAll()
@@ -55,8 +56,6 @@ public class SecurityConfig {
 //                )
 //                 //Default Basic auth config
                 .csrf(AbstractHttpConfigurer::disable)
-
-                // for POST requests via Postman
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers("/user/api/UserName").hasAnyRole("USER", "ADMIN")

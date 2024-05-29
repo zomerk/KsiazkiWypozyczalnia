@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user/api")
 public class UserAPI {
     private UserService userService;
-    SecurityContextLogoutHandler logoutHandler;
 
     @PostMapping("/createUser")
     public ResponseEntity<?> createUser(@RequestBody @Valid UserDTO userDTO) {
