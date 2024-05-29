@@ -1,17 +1,16 @@
 package com.example.ksiazkiwypozyczalnia.Rest;
 
-import com.example.ksiazkiwypozyczalnia.CrudRepo.CrudBook;
 import com.example.ksiazkiwypozyczalnia.DTO.BookDTO;
+import com.example.ksiazkiwypozyczalnia.Service.KsiazkaService;
+import com.example.ksiazkiwypozyczalnia.repo.Czasopismo;
 import com.example.ksiazkiwypozyczalnia.repo.Ksiazka;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -20,22 +19,18 @@ import java.util.List;
 @RequestMapping("/book/api")
 public class BookAPI {
 
-    private CrudBook crudBook;
+    private KsiazkaService ksiazkaService;
     @PostMapping("/create")
     public ResponseEntity<?> createBook(@RequestBody @Valid BookDTO bookDTO) {
-        var book = new Ksiazka();
-        book.setAuthor(bookDTO.getAuthor());
-        book.setTitle(bookDTO.getTitle());
-        book.setLanguage(bookDTO.getLanguage());
-        book.setType(bookDTO.getType());
-        book.setYear(bookDTO.getYear());
-        book.setTaken(bookDTO.isTaken());
-        crudBook.save(book);
-        return ResponseEntity.ok("Książka o tytule "+ bookDTO.getTitle() + " zapisana pomyślnie.");
+        return ksiazkaService.createBook(bookDTO);
     }
     @GetMapping("/books")
-    public ResponseEntity<Iterable<Ksiazka>> getAllBooks() {
-        return ResponseEntity.ok(crudBook.findAll());
+    public ResponseEntity<Iterable<Ksiazka>> getAllBooks(@RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(ksiazkaService.getPaginatedBooks(page,size));
+    }
+    @GetMapping("/books/sorted")
+    public ResponseEntity<Page<Ksiazka>> getAllBooksSorted(@RequestParam int page, @RequestParam int size, @RequestParam String sortBy, @RequestParam String order) {
+        return ResponseEntity.ok(ksiazkaService.getPaginatedAndSortedBooks(page,size,sortBy, order));
     }
 
 }
