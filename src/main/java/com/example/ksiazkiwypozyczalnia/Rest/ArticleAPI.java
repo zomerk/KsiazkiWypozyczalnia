@@ -24,12 +24,17 @@ public class ArticleAPI {
     public ResponseEntity<?> createArticle(@RequestBody @Valid ArticleDTO articleDTO) {
         return czasopismoService.createCzasopismo(articleDTO);
     }
-    @GetMapping("/article")
-    public ResponseEntity<Page<Czasopismo>> getAllBooks(@RequestParam int page, @RequestParam int size) {
-        return ResponseEntity.ok(czasopismoService.getPaginatedArticle(page,size));
-    }
-    @GetMapping("/article/sorted")
-    public ResponseEntity<Page<Czasopismo>> getAllBooksSorted(@RequestParam int page, @RequestParam int size, @RequestParam String sortBy, @RequestParam String order) {
-        return ResponseEntity.ok(czasopismoService.getPaginatedAndSortedArticle(page,size,sortBy,order));
+    @GetMapping("/articles")
+    public Page<Czasopismo> getPaginatedAndSortedArticles(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir,
+            @RequestParam(required = false) String keyword) {
+
+        if (keyword != null && !keyword.isEmpty()) {
+            return czasopismoService.searchArticles(keyword, page, size, sortBy, sortDir);
+        }
+        return czasopismoService.getPaginatedAndSortedArticle(page, size, sortBy, sortDir);
     }
 }

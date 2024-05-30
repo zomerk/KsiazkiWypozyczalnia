@@ -18,15 +18,18 @@ public class CzasopismoService {
     @Autowired
     private CrudArticle crudArticle;
 
-    public Page<Czasopismo> getPaginatedArticle(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return crudArticle.findAll(pageable);
-    }
     public Page<Czasopismo> getPaginatedAndSortedArticle(int page, int size, String sortBy,String order) {
         Sort sort = Sort.by(sortBy);
         sort = order.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
         Pageable pageable = PageRequest.of(page, size, sort);
         return crudArticle.findAll(pageable);
+    }
+
+    public Page<Czasopismo> searchArticles(String keyword, int page, int size, String sortBy, String sortDir) {
+        Sort sort = Sort.by(sortBy);
+        sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return crudArticle.search(keyword, pageable);
     }
 
     public ResponseEntity<?> createCzasopismo(ArticleDTO articleDTO) {
@@ -40,5 +43,10 @@ public class CzasopismoService {
         crudArticle.save(czasopismo);
         return ResponseEntity.ok("Artykuł o nazwie" + articleDTO.getTitle() +" został zapisany.");
 
+    }
+
+    public Czasopismo findByID(long czasopismoID) {
+        var czasopismo = crudArticle.findById(czasopismoID);
+        return czasopismo.orElse(null);
     }
 }

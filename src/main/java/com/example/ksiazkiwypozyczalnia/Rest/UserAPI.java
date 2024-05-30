@@ -38,4 +38,8 @@ public class UserAPI {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return ResponseEntity.ok(auth.getName());
     }
+    @GetMapping("/articles")
+    public ResponseEntity<?> getArticles(){
+        return ResponseEntity.ok(userService.wypozyczenieCzasopismaList());
+    }
 }

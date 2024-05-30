@@ -18,16 +18,20 @@ public class KsiazkaService {
     @Autowired
     private CrudBook crudBook;
 
-    public Page<Ksiazka> getPaginatedBooks(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return crudBook.findAll(pageable);
-    }
     public Page<Ksiazka> getPaginatedAndSortedBooks(int page, int size, String sortBy, String order) {
         Sort sort = Sort.by(sortBy);
         sort = order.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
         Pageable pageable = PageRequest.of(page, size, sort);
         return crudBook.findAll(pageable);
     }
+
+    public Page<Ksiazka> searchBooks(String keyword, int page, int size, String sortBy, String sortDir) {
+        Sort sort = Sort.by(sortBy);
+        sort = sortDir.equalsIgnoreCase("asc") ? sort.ascending() : sort.descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return crudBook.search(keyword, pageable);
+    }
+
     public ResponseEntity<?> createBook(BookDTO bookDTO) {
         var book = new Ksiazka();
         book.setAuthor(bookDTO.getAuthor());

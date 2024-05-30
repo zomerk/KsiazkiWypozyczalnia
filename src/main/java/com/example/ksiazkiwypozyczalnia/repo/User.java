@@ -29,6 +29,9 @@ public class User {
     String password;
     @JsonIgnore
     String role;
+    @JsonIgnore
+    @OneToMany(mappedBy = "uzytkownik", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WypozyczenieCzasopisma> wypozyczenia = new ArrayList<>();
 
 
     public User(String username, String password, String role) {

@@ -59,6 +59,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers("/user/api/UserName").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/articlerent/api/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().permitAll()
 
 

@@ -1,7 +1,9 @@
 package com.example.ksiazkiwypozyczalnia.Service;
 
 import com.example.ksiazkiwypozyczalnia.CrudRepo.CrudUser;
+import com.example.ksiazkiwypozyczalnia.repo.Czasopismo;
 import com.example.ksiazkiwypozyczalnia.repo.User;
+import com.example.ksiazkiwypozyczalnia.repo.WypozyczenieCzasopisma;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -42,5 +44,16 @@ public class UserService implements UserDetailsService {
         else{
             return ResponseEntity.ok("User already exists");
         }
+    }
+
+    public User findByUserName(String name) {
+        var user = crudUser.findByUsername(name);
+        return user.orElse(null);
+    }
+    //do zmiany żeby było kilka opcji historia wypozyczen, aktualnie i odrzuconych.
+    public List<Czasopismo> wypozyczenieCzasopismaList(){
+        var user = crudUser.findByUsername("string");
+        var wypozyczenia =  user.get().getWypozyczenia();
+        return wypozyczenia.stream().map(WypozyczenieCzasopisma::getCzasopismo).toList();
     }
 }

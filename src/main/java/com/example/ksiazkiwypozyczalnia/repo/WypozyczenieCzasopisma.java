@@ -1,6 +1,9 @@
 package com.example.ksiazkiwypozyczalnia.repo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,14 +27,13 @@ public class WypozyczenieCzasopisma {
 
     private Date returnDate;
 
-    private boolean allowed;
+    private String allowed = "null";
 
     private boolean returnRequest;
 
     @ManyToOne
     @JoinColumn(name = "userID")
     private User uzytkownik;
-
 
     @ManyToOne
     @JoinColumn(name = "czasopismoID")

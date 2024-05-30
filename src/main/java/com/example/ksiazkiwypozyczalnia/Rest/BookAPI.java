@@ -25,12 +25,17 @@ public class BookAPI {
         return ksiazkaService.createBook(bookDTO);
     }
     @GetMapping("/books")
-    public ResponseEntity<Iterable<Ksiazka>> getAllBooks(@RequestParam int page, @RequestParam int size) {
-        return ResponseEntity.ok(ksiazkaService.getPaginatedBooks(page,size));
-    }
-    @GetMapping("/books/sorted")
-    public ResponseEntity<Page<Ksiazka>> getAllBooksSorted(@RequestParam int page, @RequestParam int size, @RequestParam String sortBy, @RequestParam String order) {
-        return ResponseEntity.ok(ksiazkaService.getPaginatedAndSortedBooks(page,size,sortBy, order));
+    public Page<Ksiazka> getPaginatedAndSortedBooks(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir,
+            @RequestParam(required = false) String keyword) {
+
+        if (keyword != null && !keyword.isEmpty()) {
+            return ksiazkaService.searchBooks(keyword, page, size, sortBy, sortDir);
+        }
+        return ksiazkaService.getPaginatedAndSortedBooks(page, size, sortBy, sortDir);
     }
 
 }
