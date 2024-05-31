@@ -43,4 +43,8 @@ public class KsiazkaService {
         crudBook.save(book);
         return ResponseEntity.ok("Książka o tytule "+ bookDTO.getTitle() + " zapisana pomyślnie.");
     }
+    public Ksiazka findByID(long czasopismoID) {
+        var czasopismo = crudBook.findById(czasopismoID);
+        return czasopismo.orElse(null);
+    }
 }

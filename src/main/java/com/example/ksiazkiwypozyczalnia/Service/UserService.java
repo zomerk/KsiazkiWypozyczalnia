@@ -53,7 +53,7 @@ public class UserService implements UserDetailsService {
     //do zmiany żeby było kilka opcji historia wypozyczen, aktualnie i odrzuconych.
     public List<Czasopismo> wypozyczenieCzasopismaList(){
         var user = crudUser.findByUsername("string");
-        var wypozyczenia =  user.get().getWypozyczenia();
+        var wypozyczenia =  user.get().getWypozyczeniaCzasopisma();
         return wypozyczenia.stream().map(WypozyczenieCzasopisma::getCzasopismo).toList();
     }
 }

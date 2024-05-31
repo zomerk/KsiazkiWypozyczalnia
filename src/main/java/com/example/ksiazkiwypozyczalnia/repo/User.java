@@ -31,7 +31,11 @@ public class User {
     String role;
     @JsonIgnore
     @OneToMany(mappedBy = "uzytkownik", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WypozyczenieCzasopisma> wypozyczenia = new ArrayList<>();
+    private List<WypozyczenieCzasopisma> wypozyczeniaCzasopisma = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "uzytkownik", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WypozyczenieKsiazki> wypozyczeniaKsiazek = new ArrayList<>();
 
 
     public User(String username, String password, String role) {

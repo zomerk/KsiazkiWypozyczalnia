@@ -23,7 +23,7 @@ public class WypozyczenieKsiazki {
 
     private Date returnDate;
 
-    private boolean allowed;
+    private String  allowed = "null";
 
     private boolean returnRequest;
 

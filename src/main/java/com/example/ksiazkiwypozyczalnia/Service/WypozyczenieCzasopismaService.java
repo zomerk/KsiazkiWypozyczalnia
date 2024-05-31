@@ -56,9 +56,12 @@ public class WypozyczenieCzasopismaService {
     public ResponseEntity<String> RequestOptions(long wypożyczeniaCzasopismaID, boolean allowed) {
         var czasopismo = crudArticleRent.findById(wypożyczeniaCzasopismaID).get();
         if(czasopismo.getAllowed().equals("true") || czasopismo.getAllowed().equals("false")){
-            return ResponseEntity.ok("Książka została już zakceptowana/odrzucona!");
+            return ResponseEntity.ok("Czasopismo została już zakceptowana/odrzucona!");
         }
         if (!allowed) {
+            var czasopismoAcces = czasopismo.getCzasopismo();
+            czasopismoAcces.setTaken(false);
+            czasopismo.setCzasopismo(czasopismoAcces);
             czasopismo.setAllowed("false");
             czasopismo.setReturnDate(Date.from(Instant.now()));
             crudArticleRent.save(czasopismo);
@@ -66,7 +69,7 @@ public class WypozyczenieCzasopismaService {
         } else {
             czasopismo.setAllowed("true");
             crudArticleRent.save(czasopismo);
-            return ResponseEntity.ok("Udzielono wypożyczenia książki");
+            return ResponseEntity.ok("Udzielono wypożyczenia czasopisma");
         }
 
 
@@ -76,14 +79,14 @@ public class WypozyczenieCzasopismaService {
     public ResponseEntity<?> returnCzasopismo(long id) {
         var czasopismo = crudArticleRent.findById(id);
         if (czasopismo.isEmpty()) {
-            return ResponseEntity.ok("Nie ma wypożyczenia artykułu o tej nazwie");
+            return ResponseEntity.ok("Nie ma wypożyczenego czasopismo o tym numerze");
         } else {
             czasopismo.get().setReturnDate(Date.from(Instant.now()));
             var czas = czasopismo.get().getCzasopismo();
             czas.setTaken(false);
             czasopismo.get().setCzasopismo(czas);
             crudArticleRent.save(czasopismo.get());
-            return ResponseEntity.ok("Artykuł " + czas.getTitle() + " został zwrócony");
+            return ResponseEntity.ok("Czasopismo " + czas.getTitle() + " został zwrócony");
             //czasopismo.get().set
         }
     }
