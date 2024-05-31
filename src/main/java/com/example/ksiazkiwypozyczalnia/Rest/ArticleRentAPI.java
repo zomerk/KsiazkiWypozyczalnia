@@ -28,4 +28,8 @@ public class ArticleRentAPI {
     public ResponseEntity<?> acceptRequest(@RequestParam long id, @RequestParam boolean allowed){
         return wypozyczenieCzasopismaService.RequestOptions(id,allowed);
     }
+    @PostMapping("/return")
+    public ResponseEntity<?> returnCzasopismo(@RequestParam long id){
+        return wypozyczenieCzasopismaService.returnCzasopismo(id);
+    }
 }
