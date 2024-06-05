@@ -47,10 +47,7 @@ public class SecurityConfig {
         http
                .httpBasic(withDefaults())
                 //https://www.baeldung.com/spring-redirect-after-login
-//                .formLogin(form -> form
-//                        .loginPage("/login")
-//                        .permitAll()
-//                )
+                .formLogin(withDefaults())
 //                .exceptionHandling(handing -> handing
 //                        .authenticationEntryPoint(restAuthenticationEntryPoint) // Handles auth error
 //                )

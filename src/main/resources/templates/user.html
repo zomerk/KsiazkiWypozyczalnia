@@ -7,9 +7,9 @@
     <meta name="generator" content="Hugo 0.104.2">
     <title>Prywatny księgozbiór - niezalogowany użytkownik</title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/headers/">
+    <link rel="canonical" th:ref="@{https://getbootstrap.com/docs/5.2/examples/headers/}">
 
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link th:ref="@{../css/bootstrap.min.css}" rel="stylesheet">
 
     <style>
         .bd-placeholder-img {
@@ -109,21 +109,31 @@
 
 <script src="../js/bootstrap.bundle.min.js"></script>
 <script>
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
+    document.getElementById('loginForm').addEventListener('submit', async function(event) {
         event.preventDefault();
         const nickname = document.getElementById('nickname').value;
         const password = document.getElementById('password').value;
 
-        if (nickname === 'test' && password === 'test123') {
-            window.location.href = 'log_user.html';
-        }
-        else if (nickname === 'admin' && password === 'admin') {
-            window.location.href = 'admin.html';
-        }
-        else {
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nickname, password })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            if (data.role === 'user') {
+                window.location.href = 'log_user.html';
+            } else if (data.role === 'admin') {
+                window.location.href = 'admin.html';
+            }
+        } else {
             document.getElementById('errorMessage').style.display = 'block';
         }
     });
+
 </script>
 
 </body>
