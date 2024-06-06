@@ -55,6 +55,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_WHITELIST).permitAll()
+                        .requestMatchers("/admin").hasAnyRole("ADMIN")
                         .requestMatchers("/user/api/UserName").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/articlerent/api/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/bookrent/api/**").hasAnyRole("ADMIN", "USER")
