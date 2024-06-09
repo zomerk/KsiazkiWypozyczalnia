@@ -1,6 +1,7 @@
 package com.example.ksiazkiwypozyczalnia.Service;
 
 import com.example.ksiazkiwypozyczalnia.CrudRepo.CrudUser;
+import com.example.ksiazkiwypozyczalnia.DTO.Response;
 import com.example.ksiazkiwypozyczalnia.repo.Czasopismo;
 import com.example.ksiazkiwypozyczalnia.repo.User;
 import com.example.ksiazkiwypozyczalnia.repo.WypozyczenieCzasopisma;
@@ -39,10 +40,10 @@ public class UserService implements UserDetailsService {
         var user = crudUser.findByUsername(username);
         if(user.isEmpty()){
             crudUser.save(new User(username, passwordEncoder.encode(password),"user"));
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(new Response("User created successfully"));
         }
         else{
-            return ResponseEntity.ok("User already exists");
+            return ResponseEntity.badRequest().body(new Response("Username already exists"));
         }
     }
 
