@@ -2,6 +2,7 @@ package com.example.ksiazkiwypozyczalnia.Service;
 
 import com.example.ksiazkiwypozyczalnia.CrudRepo.CrudBook;
 import com.example.ksiazkiwypozyczalnia.DTO.BookDTO;
+import com.example.ksiazkiwypozyczalnia.DTO.Response;
 import com.example.ksiazkiwypozyczalnia.repo.Czasopismo;
 import com.example.ksiazkiwypozyczalnia.repo.Ksiazka;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class KsiazkaService {
         book.setYear(bookDTO.getYear());
         book.setTaken(bookDTO.isTaken());
         crudBook.save(book);
-        return ResponseEntity.ok("Książka o tytule "+ bookDTO.getTitle() + " zapisana pomyślnie.");
+        return ResponseEntity.ok(new Response("Książka o tytule "+ bookDTO.getTitle() + " zapisana pomyślnie."));
     }
     public Ksiazka findByID(long czasopismoID) {
         var czasopismo = crudBook.findById(czasopismoID);
