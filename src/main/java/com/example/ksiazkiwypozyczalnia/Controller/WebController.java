@@ -26,7 +26,7 @@ public class WebController{
             return "admin";
         }
         else if(auth.getAuthorities().stream().anyMatch(ga -> ga.getAuthority().equals("ROLE_USER"))){
-            return "user";
+            return "log_user";
         }
         else {
                 return "user";

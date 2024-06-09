@@ -1,19 +1,14 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
   <meta name="generator" content="Hugo 0.104.2">
-  <title>Prywatny księgozbiór - zalogowany użytkownik</title>
+  <title>Prywatny księgozbiór - log_user</title>
 
   <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/headers/">
-
-
-
-
-
-  <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
   <style>
     .bd-placeholder-img {
@@ -66,6 +61,14 @@
       white-space: nowrap;
       -webkit-overflow-scrolling: touch;
     }
+
+    .fs-4 {
+      font-size: 1.5rem; /* Increase font size */
+    }
+
+    .nav-link {
+      font-size: 1.25rem; /* Increase font size for nav links */
+    }
   </style>
 
 </head>
@@ -73,26 +76,27 @@
 
 <main>
   <div class="container">
-    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-      <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+    <header class="d-flex flex-wrap justify-content-between py-3 mb-4 border-bottom">
+      <a class="d-flex align-items-center mb-3 mb-md-0 me-auto text-dark text-decoration-none" th:href="@{/}">
         <span class="fs-4">Prywatny księgozbiór</span>
       </a>
 
       <ul class="nav nav-pills">
         <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Katalog</a></li>
         <li class="nav-item"><a href="#" class="nav-link">Historia wypożyczeń</a></li>
-        <li class="nav-item"><a href="#" class="nav-link" id="logout">Wyloguj</a></li>
+        <li class="nav-item"><a href="#" class="nav-link" id="logoutBtn">Wyloguj</a></li>
       </ul>
     </header>
   </div>
 </main>
 
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<script src="../static/js/bootstrap.bundle.min.js"></script>
-<script>
-  document.getElementById('logout').addEventListener('click', function(event) {
-    event.preventDefault();
-    window.location.href = 'user.html';
+<script th:inline="javascript">
+  document.getElementById('logoutBtn').addEventListener('click', function() {
+    window.location.href = /*[[@{/logout}]]*/ '[[@{/logout}]]';
   });
 </script>
 
