@@ -57,6 +57,7 @@ public class SecurityConfig {
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers("/admin").hasAnyRole("ADMIN")
                         .requestMatchers("/user/api/UserName").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/user/api/createUser").hasAnyRole("ADMIN")
                         .requestMatchers("/articlerent/api/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/bookrent/api/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().permitAll()

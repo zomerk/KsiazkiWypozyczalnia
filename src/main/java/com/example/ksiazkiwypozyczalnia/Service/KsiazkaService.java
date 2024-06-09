@@ -40,6 +40,7 @@ public class KsiazkaService {
         book.setLanguage(bookDTO.getLanguage());
         book.setType(bookDTO.getType());
         book.setYear(bookDTO.getYear());
+        book.setPages(bookDTO.getPages());
         book.setTaken(bookDTO.isTaken());
         crudBook.save(book);
         return ResponseEntity.ok(new Response("Książka o tytule "+ bookDTO.getTitle() + " zapisana pomyślnie."));

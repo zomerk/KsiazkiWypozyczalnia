@@ -69,14 +69,24 @@
         .nav-link {
             font-size: 1.25rem; /* Increase font size for nav links */
         }
+
+        .container-fluid {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .header-padding {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
     </style>
 
 </head>
 <body>
 
 <main>
-    <div class="container">
-        <header class="d-flex flex-wrap justify-content-between py-3 mb-4 border-bottom">
+    <div class="container-fluid">
+        <header class="d-flex flex-wrap justify-content-between py-3 mb-4 border-bottom header-padding">
             <a class="d-flex align-items-center mb-3 mb-md-0 me-auto text-dark text-decoration-none" th:href="@{/}">
                 <span class="fs-4">Prywatny księgozbiór</span>
             </a>
@@ -85,12 +95,15 @@
                 <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Katalog</a></li>
                 <li class="nav-item"><a href="#" class="nav-link">Prośby o wypożyczenie</a></li>
                 <li class="nav-item"><a href="#" class="nav-link" id="createUserBtn">Stwórz użytkownika</a></li>
+                <li class="nav-item"><a href="#" class="nav-link" id="addBookBtn">Dodaj książkę</a></li>
+                <li class="nav-item"><a href="#" class="nav-link" id="addArticleBtn">Dodaj czasopismo</a></li>
                 <li class="nav-item"><a href="#" class="nav-link" id="logoutBtn">Wyloguj</a></li>
             </ul>
         </header>
     </div>
 </main>
 
+<!-- Create User Modal -->
 <div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -109,6 +122,88 @@
                         <input type="password" class="form-control" id="password" name="password" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Utwórz</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Book Modal -->
+<div class="modal fade" id="addBookModal" tabindex="-1" aria-labelledby="addBookModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addBookModalLabel">Dodaj książkę</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addBookForm">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Tytuł</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="author" class="form-label">Autor</label>
+                        <input type="text" class="form-control" id="author" name="author" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="pages" class="form-label">Liczba stron</label>
+                        <input type="number" class="form-control" id="pages" name="pages" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="year" class="form-label">Rok wydania</label>
+                        <input type="number" class="form-control" id="year" name="year" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="language" class="form-label">Język</label>
+                        <input type="text" class="form-control" id="language" name="language" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Typ</label>
+                        <input type="text" class="form-control" id="type" name="type" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Stwórz</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Article Modal -->
+<div class="modal fade" id="addArticleModal" tabindex="-1" aria-labelledby="addArticleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addArticleModalLabel">Dodaj czasopismo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addArticleForm">
+                    <div class="mb-3">
+                        <label for="articleNumber" class="form-label">Numer czasopisma</label>
+                        <input type="number" class="form-control" id="articleNumber" name="articleNumber" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="articleAuthor" class="form-label">Autor</label>
+                        <input type="text" class="form-control" id="articleAuthor" name="articleAuthor" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="articleJournal" class="form-label">Tytuł czasopisma</label>
+                        <input type="text" class="form-control" id="articleJournal" name="articleJournal" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="articleLanguage" class="form-label">Język</label>
+                        <input type="text" class="form-control" id="articleLanguage" name="articleLanguage" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="articleTitle" class="form-label">Tytuł artykułu</label>
+                        <input type="text" class="form-control" id="articleTitle" name="articleTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="articleType" class="form-label">Typ</label>
+                        <input type="text" class="form-control" id="articleType" name="articleType" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Stwórz</button>
                 </form>
             </div>
         </div>
@@ -146,6 +241,77 @@
                 }
                 else{
                     alert('Użytkownik już istnieje o tym username.');
+                }
+                return response.json();
+            })
+    });
+
+    document.getElementById('addBookBtn').addEventListener('click', function() {
+        var addBookModal = new bootstrap.Modal(document.getElementById('addBookModal'));
+        addBookModal.show();
+    });
+
+    document.getElementById('addBookForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const title = document.getElementById('title').value;
+        const author = document.getElementById('author').value;
+        const pages = document.getElementById('pages').value;
+        const year = document.getElementById('year').value;
+        const language = document.getElementById('language').value;
+        const type = document.getElementById('type').value;
+
+        const url = /*[[@{/book/api/create}]]*/ '[[@{/book/api/create}]]';
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ title, author, pages, year, language, type })
+        })
+            .then(function(response) {
+                if (response.ok) {
+                    alert('Książka została dodana!')
+                }
+                else{
+                    alert('Taka książka już istnieje w księgozbiorze.');
+                }
+                return response.json();
+            })
+    });
+
+    document.getElementById('addArticleBtn').addEventListener('click', function() {
+        var addArticleModal = new bootstrap.Modal(document.getElementById('addArticleModal'));
+        addArticleModal.show();
+    });
+
+    document.getElementById('addArticleForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const number = document.getElementById('articleNumber').value;
+        const author_article = document.getElementById('articleAuthor').value;
+        const journal_title = document.getElementById('articleJournal').value;
+        const language_article = document.getElementById('articleLanguage').value;
+        const article_title = document.getElementById('articleTitle').value;
+        const type_article = document.getElementById('articleType').value;
+
+        const url = /*[[@{/article/api/create}]]*/ '[[@{/article/api/create}]]';
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ journalNumber: number, author: author_article, journal: journal_title,
+                language: language_article, title: article_title, type: type_article })
+        })
+            .then(function(response) {
+                if (response.ok) {
+                    alert('Czasopismo zostało dodane!')
+                }
+                else{
+                    alert('Takie czasopismo już istnieje w księgozbiorze.');
                 }
                 return response.json();
             })

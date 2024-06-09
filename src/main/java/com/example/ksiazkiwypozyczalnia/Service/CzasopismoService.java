@@ -2,6 +2,7 @@ package com.example.ksiazkiwypozyczalnia.Service;
 
 import com.example.ksiazkiwypozyczalnia.CrudRepo.CrudArticle;
 import com.example.ksiazkiwypozyczalnia.DTO.ArticleDTO;
+import com.example.ksiazkiwypozyczalnia.DTO.Response;
 import com.example.ksiazkiwypozyczalnia.DTO.BookDTO;
 import com.example.ksiazkiwypozyczalnia.repo.Czasopismo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class CzasopismoService {
         czasopismo.setJournal(articleDTO.getJournal());
         czasopismo.setJournalNumber(articleDTO.getJournalNumber());
         crudArticle.save(czasopismo);
-        return ResponseEntity.ok("Artykuł o nazwie" + articleDTO.getTitle() +" został zapisany.");
+        return ResponseEntity.ok(new Response("Artykuł o nazwie " + articleDTO.getTitle() +" został zapisany."));
 
     }
 
