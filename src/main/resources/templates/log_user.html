@@ -69,6 +69,28 @@
     .nav-link {
       font-size: 1.25rem; /* Increase font size for nav links */
     }
+
+    .container-fluid {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .header-padding {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+
+    .details-row {
+      display: none;
+    }
+
+    .table-container {
+      display: flex;
+      justify-content: center;
+    }
+    .table-wrapper {
+      width: 80%;
+    }
   </style>
 
 </head>
@@ -87,6 +109,50 @@
         <li class="nav-item"><a href="#" class="nav-link" id="logoutBtn">Wyloguj</a></li>
       </ul>
     </header>
+
+    <div class="table-container">
+      <div class="table-wrapper">
+        <h2 class="text-center mb-4">Książki</h2>
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th scope="col">Tytuł</th>
+            <th scope="col">Autor</th>
+            <th scope="col">Gatunek</th>
+            <th scope="col">Liczba stron</th>
+            <th scope="col">Język</th>
+            <th scope="col">Rok wydania</th>
+            <th scope="col">Akcja</th>
+          </tr>
+          </thead>
+          <tbody id="booksTableBody">
+          <!-- Books will be dynamically inserted here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="table-container mt-5">
+      <div class="table-wrapper">
+        <h2 class="text-center mb-4">Czasopisma</h2>
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th scope="col">Tytuł czasopisma</th>
+            <th scope="col">Wydawca</th>
+            <th scope="col">Numer</th>
+            <th scope="col">Typ</th>
+            <th scope="col">Tytuł artykułu</th>
+            <th scope="col">Język</th>
+            <th scope="col">Akcja</th>
+          </tr>
+          </thead>
+          <tbody id="articlesTableBody">
+          <!-- Articles will be dynamically inserted here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </main>
 
@@ -95,6 +161,78 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script th:inline="javascript">
+
+  document.addEventListener('DOMContentLoaded', function () {
+    fetchBooks();
+    fetchArticles();
+  });
+
+  function fetchBooks() {
+    const url = /*[[@{/book/api/books}]]*/ '[[@{/book/api/books}]]';
+
+    fetch(url)
+            .then(response => response.json())
+            .then(data => {
+              const booksTableBody = document.getElementById('booksTableBody');
+              booksTableBody.innerHTML = '';
+
+              data.content.forEach(book => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                            <td>${book.title}</td>
+                            <td>${book.author}</td>
+                            <td>${book.type}</td>
+                            <td>${book.pages}</td>
+                            <td>${book.language}</td>
+                            <td>${book.year}</td>
+                            <td>
+                                <button class="btn btn-info" onclick="borrowBook(${book.id})">Wypożycz</button>
+                            </td>
+                        `;
+                booksTableBody.appendChild(row);
+              });
+            })
+            .catch(error => console.error('Error fetching books:', error));
+  }
+
+  function fetchArticles() {
+    const url = /*[[@{/article/api/articles}]]*/ '[[@{/article/api/articles}]]';
+
+    fetch(url)
+            .then(response => response.json())
+            .then(data => {
+              const articlesTableBody = document.getElementById('articlesTableBody');
+              articlesTableBody.innerHTML = '';
+
+              data.content.forEach(article => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                            <td>${article.title}</td>
+                            <td>${article.author}</td>
+                            <td>${article.journalNumber}</td>
+                            <td>${article.type}</td>
+                            <td>${article.journal}</td>
+                            <td>${article.language}</td>
+                            <td>
+                                <button class="btn btn-info" onclick="borrowArticle(${article.id})">Wypożycz</button>
+                            </td>
+                        `;
+                articlesTableBody.appendChild(row);
+              });
+            })
+            .catch(error => console.error('Error fetching articles:', error));
+  }
+
+  function borrowBook(bookId) {
+    // Placeholder for future functionality
+    alert('Functionality to borrow a book will be added here.');
+  }
+
+  function borrowArticle(articleId) {
+    // Placeholder for future functionality
+    alert('Functionality to borrow an article will be added here.');
+  }
+
   document.getElementById('logoutBtn').addEventListener('click', function() {
     window.location.href = /*[[@{/logout}]]*/ '[[@{/logout}]]';
   });
