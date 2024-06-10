@@ -37,4 +37,8 @@ public class ArticleAPI {
         }
         return czasopismoService.getPaginatedAndSortedArticle(page, size, sortBy, sortDir);
     }
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteArticle(@RequestParam long id) {
+        return czasopismoService.deleteArticle(id);
+    }
 }

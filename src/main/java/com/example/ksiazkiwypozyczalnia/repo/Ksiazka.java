@@ -1,7 +1,11 @@
 package com.example.ksiazkiwypozyczalnia.repo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "książka")
@@ -28,5 +32,7 @@ public class Ksiazka {
 
     private String type;
 
-    // Getters and Setters
+    @JsonIgnore
+    @OneToMany(mappedBy = "ksiazka", cascade = CascadeType.ALL, orphanRemoval = false)
+    private List<WypozyczenieKsiazki> wypozyczeniaKsiazek = new ArrayList<>();
 }

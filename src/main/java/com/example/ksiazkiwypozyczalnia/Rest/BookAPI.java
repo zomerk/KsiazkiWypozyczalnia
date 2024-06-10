@@ -24,6 +24,10 @@ public class BookAPI {
     public ResponseEntity<?> createBook(@RequestBody @Valid BookDTO bookDTO) {
         return ksiazkaService.createBook(bookDTO);
     }
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteBook(@RequestParam long id) {
+        return ksiazkaService.deleteBook(id);
+    }
     @GetMapping("/books")
     public Page<Ksiazka> getPaginatedAndSortedBooks(
             @RequestParam(defaultValue = "0") int page,

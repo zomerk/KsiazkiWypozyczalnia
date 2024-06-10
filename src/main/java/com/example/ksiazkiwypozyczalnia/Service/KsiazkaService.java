@@ -49,4 +49,15 @@ public class KsiazkaService {
         var czasopismo = crudBook.findById(czasopismoID);
         return czasopismo.orElse(null);
     }
+
+    public ResponseEntity<?> deleteBook(long ID) {
+        if(crudBook.findById(ID).isPresent()) {
+            crudBook.deleteById(ID);
+            return ResponseEntity.ok("Książka usunięta");
+        }
+        else{
+            return ResponseEntity.notFound().build();
+        }
+
+    }
 }

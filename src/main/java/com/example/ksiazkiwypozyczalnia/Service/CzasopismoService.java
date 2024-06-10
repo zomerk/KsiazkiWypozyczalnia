@@ -50,4 +50,14 @@ public class CzasopismoService {
         var czasopismo = crudArticle.findById(czasopismoID);
         return czasopismo.orElse(null);
     }
+    public ResponseEntity<?> deleteArticle(long ID) {
+        if(crudArticle.findById(ID).isPresent()) {
+            crudArticle.deleteById(ID);
+            return ResponseEntity.ok("Artykuł usunięta");
+        }
+        else{
+            return ResponseEntity.notFound().build();
+        }
+
+    }
 }

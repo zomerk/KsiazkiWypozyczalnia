@@ -57,4 +57,5 @@ public class UserService implements UserDetailsService {
         var wypozyczenia =  user.get().getWypozyczeniaCzasopisma();
         return wypozyczenia.stream().map(WypozyczenieCzasopisma::getCzasopismo).toList();
     }
+
 }
