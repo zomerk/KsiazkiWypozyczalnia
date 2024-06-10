@@ -401,6 +401,7 @@
             .then(function(response) {
                 if (response.ok) {
                     alert('Książka została dodana!')
+                    fetchBooks();
                 }
                 else{
                     alert('Taka książka już istnieje w księgozbiorze.');
@@ -408,6 +409,26 @@
                 return response.json();
             })
     });
+
+    function deleteBook(bookId) {
+        const confirmed = confirm('Czy na pewno chcesz usunąć tę książkę?');
+        if (confirmed) {
+            const url = /*[[@{/book/api/delete}]]*/ '[[@{/book/api/delete}]]';
+
+            fetch(url + '?id=' + bookId, {
+                method: 'POST'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Książka została usunięta.');
+                        fetchBooks();
+                    } else {
+                        alert('Wystąpił błąd podczas usuwania książki.');
+                    }
+                })
+                .catch(error => console.error('Error deleting book:', error));
+        }
+    }
 
     document.getElementById('addArticleBtn').addEventListener('click', function() {
         var addArticleModal = new bootstrap.Modal(document.getElementById('addArticleModal'));
@@ -437,6 +458,7 @@
             .then(function(response) {
                 if (response.ok) {
                     alert('Czasopismo zostało dodane!')
+                    fetchArticles();
                 }
                 else{
                     alert('Takie czasopismo już istnieje w księgozbiorze.');
@@ -444,6 +466,26 @@
                 return response.json();
             })
     });
+
+    function deleteArticle(articleId) {
+        const confirmed = confirm('Czy na pewno chcesz usunąć tę książkę?');
+        if (confirmed) {
+            const url = /*[[@{/article/api/delete}]]*/ '[[@{/article/api/delete}]]';
+
+            fetch(url + '?id=' + articleId, {
+                method: 'POST'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Czasopismo zostało usunięte.');
+                        fetchArticles();
+                    } else {
+                        alert('Wystąpił błąd podczas usuwania czasopisma.');
+                    }
+                })
+                .catch(error => console.error('Error deleting article:', error));
+        }
+    }
 
     document.getElementById('logoutBtn').addEventListener('click', function() {
         window.location.href = /*[[@{/logout}]]*/ '[[@{/logout}]]';
