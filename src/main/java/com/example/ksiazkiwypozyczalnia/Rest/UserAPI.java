@@ -31,7 +31,7 @@ public class UserAPI {
 
     @PostMapping("/createUser")
     public ResponseEntity<?> createUser(@RequestBody @Valid UserDTO userDTO) {
-        return userService.CreateUser(userDTO.getUsername(),userDTO.getPassword());
+        return userService.CreateUser(userDTO.getUsername(), userDTO.getPassword());
     }
     @GetMapping("/UserName")
     public ResponseEntity<?> getUserName(){

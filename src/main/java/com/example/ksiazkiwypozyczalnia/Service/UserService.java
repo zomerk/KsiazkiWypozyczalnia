@@ -43,7 +43,7 @@ public class UserService implements UserDetailsService {
             return ResponseEntity.ok(new Response("User created successfully"));
         }
         else{
-            return ResponseEntity.badRequest().body(new Response("Username already exists"));
+            return ResponseEntity.ok(new Response("Username already exists"));
         }
     }
 
