@@ -2,10 +2,10 @@ package com.example.ksiazkiwypozyczalnia.Service;
 
 import com.example.ksiazkiwypozyczalnia.CrudRepo.CrudUser;
 import com.example.ksiazkiwypozyczalnia.DTO.Response;
-import com.example.ksiazkiwypozyczalnia.repo.Czasopismo;
-import com.example.ksiazkiwypozyczalnia.repo.User;
-import com.example.ksiazkiwypozyczalnia.repo.WypozyczenieCzasopisma;
+import com.example.ksiazkiwypozyczalnia.repo.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -53,9 +53,17 @@ public class UserService implements UserDetailsService {
     }
     //do zmiany żeby było kilka opcji historia wypozyczen, aktualnie i odrzuconych.
     public List<Czasopismo> wypozyczenieCzasopismaList(){
-        var user = crudUser.findByUsername("string");
-        var wypozyczenia =  user.get().getWypozyczeniaCzasopisma();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        var user = findByUserName(auth.getName());
+        var wypozyczenia =  user.getWypozyczeniaCzasopisma();
         return wypozyczenia.stream().map(WypozyczenieCzasopisma::getCzasopismo).toList();
+    }
+
+    public List<Ksiazka> wypozyczenieKsiazkiList(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        var user = findByUserName(auth.getName());
+        var wypozyczenia =  user.getWypozyczeniaKsiazek();
+        return wypozyczenia.stream().map(WypozyczenieKsiazki::getKsiazka).toList();
     }
 
 }

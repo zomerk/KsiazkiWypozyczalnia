@@ -42,4 +42,8 @@ public class UserAPI {
     public ResponseEntity<?> getArticles(){
         return ResponseEntity.ok(userService.wypozyczenieCzasopismaList());
     }
+    @GetMapping("/books")
+    public ResponseEntity<?> getBooks(){
+        return ResponseEntity.ok(userService.wypozyczenieKsiazkiList());
+    }
 }
